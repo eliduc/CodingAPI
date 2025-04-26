@@ -1,4 +1,4 @@
-[#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Connect‑4 with AlphaZero‑style self‑play (PUCT MCTS + CNN policy‑value NN)
@@ -40,7 +40,7 @@ COLOR_MAP  = {RED_PIECE: RED,   GREEN_PIECE: GREEN}
 
 DEFAULT_MCTS_ITERATIONS = 800
 DEFAULT_PUCT_C          = 1.25
-NN_MODEL_FILE           = "C4_NN.pt"
+NN_MODEL_FILE           = "C4.pt"
 MCTS_CONFIG_FILE        = "mcts_config.json"
 MAX_TRAINING_EXAMPLES   = 30_000
 
