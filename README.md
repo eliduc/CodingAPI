@@ -1,6 +1,6 @@
 # CodingAPI
 
-![License](https://img.shields.io/github/license/eliduc/CodingAPI)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Last Commit](https://img.shields.io/github/last-commit/eliduc/CodingAPI)
 ![Repo Size](https://img.shields.io/github/repo-size/eliduc/CodingAPI)
 ![Issues](https://img.shields.io/github/issues/eliduc/CodingAPI)
