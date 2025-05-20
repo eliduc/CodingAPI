@@ -1,3 +1,0 @@
-Write an app that dynamically demonstrates the creation of Lorenz attractor. The trajectory of the attractor should form the attractor proper. The points on the trajectory should be colored according to the value of time t. The attractor should be rotating slowly +/- 90 degrees around vertical axis for demo purpose. The user should be able to change the parameters of the attractor and the time scale right in the visual. The visual should be maximally stunning. Also the user should be able to rotate the picture using the mouse in 3d. 
-
-
