@@ -76,6 +76,8 @@ CodingAPI offers a rich set of features to streamline the code development lifec
     * `psutil`: Used by `Connect4-AlphaZero.py` for process management during shutdown.
     * `matplotlib`, `numba`, `torch`, `torchvision`, `torchaudio`: Required by the `Connect4-AlphaZero.py` example.
 
+	 or pip -r requirements.txt
+
 4.  **Configure API Keys:**
     * **Environment Variables (Recommended):** Set the following environment variables with your API keys:
         * `OPENAI_API_KEY`
