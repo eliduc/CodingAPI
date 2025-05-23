@@ -4,3 +4,4 @@ APIKeys
 propt*.*
 *.log
 *.env
+data/

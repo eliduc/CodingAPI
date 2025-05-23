@@ -34,16 +34,6 @@ Key features:
 - Added database storage for all generated code, audits and project information (new in v9.0)
 - Changed config, settings and database storage to /data/ subdirectory (new in v9.1)
 
-Changes in v9.2.2 (May 23, 2025):
-- Added visual separation between vendor models in Coding LLM and Auditing LLM dropdowns
-- Models are now grouped by vendor with separator lines for better organization
-- Improved dropdown navigation to skip separator entries
-
-Changes in v9.2.1 (May 23, 2025):
-- Fixed dynamic model registration to only log new models on first discovery
-- Added persistent storage for dynamically discovered models
-- Prevents repeated logging of already-known dynamic models on subsequent launches
-
 Changes in v9.2 (May 22, 2025):
 - Added API call to list available Claude models using client.models.list()
 - Removed hardcoded Claude model testing in favor of dynamic model discovery
@@ -377,35 +367,6 @@ DEEPSEEK_PARAMS = {
     }
 }
 
-def load_dynamic_models():
-    """Load previously discovered dynamic models from persistent storage."""
-    try:
-        dynamic_models_file = os.path.join(get_config_dir(), "dynamic_models.json")
-        if os.path.exists(dynamic_models_file):
-            with open(dynamic_models_file, 'r') as f:
-                saved_models = json.load(f)
-                DYNAMIC_MODEL_REGISTRY.update(saved_models)
-                logger.debug(f"Loaded {len(saved_models)} dynamic models from storage")
-    except Exception as e:
-        logger.error(f"Error loading dynamic models: {e}")
-
-def save_dynamic_models():
-    """Save the current dynamic model registry to persistent storage."""
-    try:
-        config_dir = get_config_dir()
-        os.makedirs(config_dir, exist_ok=True)
-        dynamic_models_file = os.path.join(config_dir, "dynamic_models.json")
-        
-        with open(dynamic_models_file, 'w') as f:
-            json.dump(DYNAMIC_MODEL_REGISTRY, f, indent=2)
-        logger.debug(f"Saved {len(DYNAMIC_MODEL_REGISTRY)} dynamic models to storage")
-    except Exception as e:
-        logger.error(f"Error saving dynamic models: {e}")
-
-def is_model_already_registered(display_name):
-    """Check if a model is already registered in either LLM_MAP or DYNAMIC_MODEL_REGISTRY."""
-    return display_name in LLM_MAP or display_name in DYNAMIC_MODEL_REGISTRY
-
 def extract_date_from_model_id(model_id):
     """
     Extract date from model ID if possible.
@@ -480,126 +441,6 @@ def is_model_newer_than_existing(model_id, provider_name, display_name=None):
     
     newest_existing_date = get_newest_model_date_for_provider(provider_name)
     return model_date > newest_existing_date
-
-def create_grouped_model_list(all_available_models, selected_models):
-    """
-    Create a list of models grouped by vendor with visual separators.
-    
-    Args:
-        all_available_models: Dictionary with provider names as keys and model lists as values
-        selected_models: List of selected model names
-        
-    Returns:
-        List of models with separator entries between vendors
-    """
-    grouped_list = []
-    
-    # Define the order of providers
-    provider_order = ["OpenAI", "Claude", "Gemini", "DeepSeek"]
-    
-    for provider in provider_order:
-        provider_models = []
-        
-        # Get models for this provider from all available models
-        if provider in all_available_models:
-            for model in all_available_models[provider]:
-                if model in selected_models:
-                    provider_models.append(model)
-        
-        # If this provider has models, add them with a separator
-        if provider_models:
-            # Add separator (except for the first provider if list is empty)
-            if grouped_list:
-                grouped_list.append(f"──── {provider} ────")
-            else:
-                grouped_list.append(f"──── {provider} ────")
-            
-            # Add the models
-            grouped_list.extend(provider_models)
-    
-    # If no models at all, add the default message
-    if not grouped_list:
-        grouped_list = ["No models available - configure API keys first"]
-    
-    return grouped_list
-
-def is_separator_entry(entry):
-    """Check if a dropdown entry is a separator."""
-    return entry.startswith("────") and entry.endswith("────")
-
-def get_valid_model_from_combobox(combobox, available_models):
-    """
-    Get a valid model selection from a combobox, skipping separators.
-    
-    Args:
-        combobox: The ttk.Combobox widget
-        available_models: List of available model names (without separators)
-        
-    Returns:
-        Valid model name or None
-    """
-    current = combobox.get()
-    
-    # If current selection is a separator or invalid, find the first valid model
-    if is_separator_entry(current) or current not in available_models:
-        values = combobox['values']
-        for value in values:
-            if not is_separator_entry(value) and value != "No models available - configure API keys first":
-                return value
-    
-    return current if not is_separator_entry(current) else None
-
-
-def create_combobox_with_separators(parent, values, available_models, default_index=0, **kwargs):
-    """
-    Create a combobox that handles separator entries properly.
-    
-    Args:
-        parent: Parent widget
-        values: List of values including separators
-        available_models: List of actual selectable models
-        default_index: Default selection index
-        **kwargs: Additional arguments for Combobox
-        
-    Returns:
-        ttk.Combobox widget
-    """
-    combobox = ttk.Combobox(parent, values=values, state="readonly", **kwargs)
-    
-    # Find first non-separator entry for default
-    default_set = False
-    for i, value in enumerate(values):
-        if not is_separator_entry(value) and value != "No models available - configure API keys first":
-            combobox.current(i)
-            default_set = True
-            break
-    
-    if not default_set and values:
-        combobox.current(0)
-    
-    # Handle selection changes to skip separators
-    def on_selection_change(event):
-        current_value = combobox.get()
-        if is_separator_entry(current_value):
-            # Find the next valid entry
-            current_index = combobox.current()
-            values = combobox['values']
-            
-            # Try going down first
-            for i in range(current_index + 1, len(values)):
-                if not is_separator_entry(values[i]):
-                    combobox.current(i)
-                    return
-            
-            # If nothing below, try going up
-            for i in range(current_index - 1, -1, -1):
-                if not is_separator_entry(values[i]):
-                    combobox.current(i)
-                    return
-    
-    combobox.bind('<<ComboboxSelected>>', on_selection_change)
-    
-    return combobox
 
 # Function to determine task type from description (basic heuristic)
 def determine_task_type(description, language):
@@ -1189,7 +1030,6 @@ class SecureConfig:
                     seen_display_names.add(model_name)
             
             # Then check discovered models
-            models_added = False
             for model_id in all_models:
                 if any(pattern in model_id.lower() for pattern in ['gpt-4', 'o3', 'o4', 'gpt-3.5']):
                     # Convert model ID to display name
@@ -1201,9 +1041,7 @@ class SecureConfig:
                         if not display_name:
                             # Generate a display name from the model ID
                             display_name = f"OpenAI {model_id}"
-                        
-                        # Check if this model is already registered
-                        if not is_model_already_registered(display_name):
+                            
                             # Add to dynamic registry
                             DYNAMIC_MODEL_REGISTRY[display_name] = {
                                 "model": model_id,
@@ -1211,17 +1049,12 @@ class SecureConfig:
                                 "temperature_allowed": True
                             }
                             logger.info(f"Dynamically registered new OpenAI model: {display_name} -> {model_id}")
-                            models_added = True
                         
                         if display_name and display_name not in seen_display_names:
                             relevant_models.append(display_name)
                             seen_display_names.add(display_name)
                     else:
                         logger.debug(f"Skipping older OpenAI model: {model_id}")
-            
-            # Save dynamic models if any were added
-            if models_added:
-                save_dynamic_models()
             
             return relevant_models
         except Exception as e:
@@ -1246,7 +1079,6 @@ class SecureConfig:
                 if info.get("family") == "Claude":
                     all_models.append(model_name)
             
-            models_added = False
             while has_more:
                 try:
                     # Make API call with pagination
@@ -1267,8 +1099,8 @@ class SecureConfig:
                                 if is_model_newer_than_existing(model.id, "Claude", model.display_name):
                                     all_models.append(model.display_name)
                                     
-                                    # If this model isn't already registered, add it to dynamic registry
-                                    if not is_model_already_registered(model.display_name):
+                                    # If this model isn't in LLM_MAP, add it to dynamic registry
+                                    if model.display_name not in LLM_MAP:
                                         # Special handling for Claude Opus 4.0
                                         if "opus-4" in model.id.lower():
                                             DYNAMIC_MODEL_REGISTRY[model.display_name] = {
@@ -1284,7 +1116,6 @@ class SecureConfig:
                                                 "temperature_allowed": True
                                             }
                                         logger.info(f"Dynamically registered new Claude model: {model.display_name} -> {model.id}")
-                                        models_added = True
                                 else:
                                     logger.debug(f"Skipping older Claude model: {model.display_name} ({model.id})")
                     
@@ -1298,10 +1129,6 @@ class SecureConfig:
                 except Exception as e:
                     logger.error(f"Error during Claude model pagination: {str(e)}")
                     break
-            
-            # Save dynamic models if any were added
-            if models_added:
-                save_dynamic_models()
             
             # Sort models for consistent display
             all_models.sort()
@@ -1336,7 +1163,6 @@ class SecureConfig:
                     seen_display_names.add(model_name)
             
             # Then check discovered models
-            models_added = False
             for model in models:
                 # Extract model name and convert to display name
                 model_name = model.name.split('/')[-1]  # Get last part after slash
@@ -1349,9 +1175,7 @@ class SecureConfig:
                         if not display_name:
                             # Generate a display name from the model ID
                             display_name = f"Gemini {model_name}"
-                        
-                        # Check if this model is already registered
-                        if not is_model_already_registered(display_name):
+                            
                             # Add to dynamic registry
                             DYNAMIC_MODEL_REGISTRY[display_name] = {
                                 "model": model_name,
@@ -1359,17 +1183,12 @@ class SecureConfig:
                                 "temperature_allowed": True
                             }
                             logger.info(f"Dynamically registered new Gemini model: {display_name} -> {model_name}")
-                            models_added = True
                         
                         if display_name and display_name not in seen_display_names:
                             relevant_models.append(display_name)
                             seen_display_names.add(display_name)
                     else:
                         logger.debug(f"Skipping older Gemini model: {model_name}")
-            
-            # Save dynamic models if any were added
-            if models_added:
-                save_dynamic_models()
             
             return relevant_models
         except Exception as e:
@@ -1398,7 +1217,6 @@ class SecureConfig:
                     seen_display_names.add(model_name)
             
             # Then check discovered models
-            models_added = False
             for model in response.data:
                 if 'deepseek' in model.id.lower():
                     # Check if this model is newer than our existing models
@@ -1409,9 +1227,7 @@ class SecureConfig:
                         if not display_name:
                             # Generate a display name from the model ID
                             display_name = f"DeepSeek {model.id}"
-                        
-                        # Check if this model is already registered
-                        if not is_model_already_registered(display_name):
+                            
                             # Add to dynamic registry
                             DYNAMIC_MODEL_REGISTRY[display_name] = {
                                 "model": model.id,
@@ -1419,17 +1235,12 @@ class SecureConfig:
                                 "temperature_allowed": True
                             }
                             logger.info(f"Dynamically registered new DeepSeek model: {display_name} -> {model.id}")
-                            models_added = True
                         
                         if display_name and display_name not in seen_display_names:
                             relevant_models.append(display_name)
                             seen_display_names.add(display_name)
                     else:
                         logger.debug(f"Skipping older DeepSeek model: {model.id}")
-            
-            # Save dynamic models if any were added
-            if models_added:
-                save_dynamic_models()
             
             return relevant_models
         except Exception as e:
@@ -5243,9 +5054,6 @@ def main():
     # Variable to track which model's code is currently displayed
     current_displayed_model = None
     
-    # Load previously discovered dynamic models
-    load_dynamic_models()
-    
     # Initialize the database
     init_database()
     
@@ -5282,10 +5090,6 @@ def main():
         available_coding_models = ["No models available - configure API keys first"]
     if not available_auditing_models:
         available_auditing_models = ["No models available - configure API keys first"]
-    
-    # Create grouped lists for dropdowns
-    grouped_coding_models = create_grouped_model_list(all_available_models, available_coding_models)
-    grouped_auditing_models = create_grouped_model_list(all_available_models, available_auditing_models)
 
     # Styling configuration
     style = ttk.Style(root)
@@ -5516,44 +5320,20 @@ def main():
     Tooltip(label_coding_llm, "Select the LLM to use for code generation")
     
     # Two different widgets for Coding LLM based on mode
-    # 1. Standard Combobox for Multiple Correction mode - now with separators
-    combo_coding_llm = create_combobox_with_separators(
-        frm_coding_llm, 
-        grouped_coding_models, 
-        available_coding_models
-    )
+    # 1. Standard Combobox for Multiple Correction mode
+    combo_coding_llm = ttk.Combobox(frm_coding_llm, values=available_coding_models, state="readonly")
+    if available_coding_models:
+        combo_coding_llm.current(0)
     combo_coding_llm.pack(anchor="w", pady=3, fill=tk.X)
     
     # 2. Listbox with multiple selection for Multiple Creation mode
     frame_listbox = ttk.Frame(frm_coding_llm)
     lb_coding_llm = tk.Listbox(frame_listbox, selectmode=tk.MULTIPLE, height=6)
-    
-    # Add models to listbox with visual separation
-    for item in grouped_coding_models:
-        lb_coding_llm.insert(tk.END, item)
-        # Style separator entries differently
-        if is_separator_entry(item):
-            index = lb_coding_llm.size() - 1
-            lb_coding_llm.itemconfig(index, 
-                                   foreground='gray', 
-                                   selectforeground='gray',
-                                   selectbackground=lb_coding_llm.cget('background'))
+    for model in available_coding_models:
+        lb_coding_llm.insert(tk.END, model)
     
     scrollbar = ttk.Scrollbar(frame_listbox, orient="vertical", command=lb_coding_llm.yview)
     lb_coding_llm.configure(yscrollcommand=scrollbar.set)
-    
-    # Bind selection event to skip separators in listbox
-    def on_listbox_select(event):
-        widget = event.widget
-        selections = widget.curselection()
-        
-        # Remove separator entries from selection
-        for idx in selections:
-            item = widget.get(idx)
-            if is_separator_entry(item):
-                widget.selection_clear(idx)
-    
-    lb_coding_llm.bind('<<ListboxSelect>>', on_listbox_select)
     
     lb_coding_llm.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
     scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -5568,11 +5348,9 @@ def main():
     label_audit_llm = ttk.Label(frm_audit_llm, text="Auditing LLM", style='Bold.TLabel')
     label_audit_llm.pack(anchor="w")
     Tooltip(label_audit_llm, "Select the LLM to use for code auditing and analysis")
-    combo_audit_llm = create_combobox_with_separators(
-        frm_audit_llm,
-        grouped_auditing_models,
-        available_auditing_models
-    )
+    combo_audit_llm = ttk.Combobox(frm_audit_llm, values=available_auditing_models, state="readonly")
+    if available_auditing_models:
+        combo_audit_llm.current(0)  # Default to first available model for auditing
     combo_audit_llm.pack(anchor="w", pady=3, fill=tk.X)
     
     # Iterations - fourth column
@@ -5710,43 +5488,25 @@ def main():
     def update_model_lists(new_coding_models, new_auditing_models):
         """Update the model lists and UI components after model selection."""
         nonlocal available_coding_models, available_auditing_models
-        nonlocal grouped_coding_models, grouped_auditing_models
         
         # Update the lists
         available_coding_models = new_coding_models
         available_auditing_models = new_auditing_models
         
-        # Recreate grouped lists
-        grouped_coding_models = create_grouped_model_list(all_available_models, available_coding_models)
-        grouped_auditing_models = create_grouped_model_list(all_available_models, available_auditing_models)
-        
         # Update coding combobox
-        combo_coding_llm['values'] = grouped_coding_models
-        # Find first non-separator entry
-        for i, value in enumerate(grouped_coding_models):
-            if not is_separator_entry(value) and value != "No models available - configure API keys first":
-                combo_coding_llm.current(i)
-                break
+        combo_coding_llm['values'] = available_coding_models
+        if available_coding_models and available_coding_models[0] != "No models available - configure API keys first":
+            combo_coding_llm.current(0)
         
         # Update auditing combobox
-        combo_audit_llm['values'] = grouped_auditing_models
-        # Find first non-separator entry
-        for i, value in enumerate(grouped_auditing_models):
-            if not is_separator_entry(value) and value != "No models available - configure API keys first":
-                combo_audit_llm.current(i)
-                break
+        combo_audit_llm['values'] = available_auditing_models
+        if available_auditing_models and available_auditing_models[0] != "No models available - configure API keys first":
+            combo_audit_llm.current(0)
         
         # Update listbox for multiple creation mode
         lb_coding_llm.delete(0, tk.END)
-        for item in grouped_coding_models:
-            lb_coding_llm.insert(tk.END, item)
-            # Style separator entries differently
-            if is_separator_entry(item):
-                index = lb_coding_llm.size() - 1
-                lb_coding_llm.itemconfig(index, 
-                                       foreground='gray', 
-                                       selectforeground='gray',
-                                       selectbackground=lb_coding_llm.cget('background'))
+        for model in available_coding_models:
+            lb_coding_llm.insert(tk.END, model)
 
     # Add file browsing functionality
     def browse_file():
@@ -6506,7 +6266,7 @@ def main():
             
             # Check if we're in multiple creation mode
             if mode_var.get() == "creation":
-                # Get selected models from the listbox, filtering out separators
+                # Get selected models from the listbox
                 selected_indices = lb_coding_llm.curselection()
                 if not selected_indices:
                     root.after(0, lambda: messagebox.showerror("Selection Error", "Please select at least one LLM model"))
@@ -6516,20 +6276,7 @@ def main():
                     root.after(0, reenable_button)
                     return
                     
-                # Filter out separator entries
-                selected_models = []
-                for idx in selected_indices:
-                    model = lb_coding_llm.get(idx)
-                    if not is_separator_entry(model):
-                        selected_models.append(model)
-                
-                if not selected_models:
-                    root.after(0, lambda: messagebox.showerror("Selection Error", "Please select at least one LLM model (not a separator)"))
-                    def reenable_button():
-                        btn_start.config(state=tk.NORMAL)
-                        btn_stop.config(state=tk.DISABLED)
-                    root.after(0, reenable_button)
-                    return
+                selected_models = [lb_coding_llm.get(idx) for idx in selected_indices]
                 
                 # Check if we need to use an existing file
                 file_content = None
@@ -6756,13 +6503,9 @@ def main():
                 messagebox.showerror("Invalid Input", "Iterations must be a valid number")
                 return
             
-            # Get selected LLMs for correction mode, handling separators
-            user_coding_llm = get_valid_model_from_combobox(combo_coding_llm, available_coding_models)
-            user_audit_llm = get_valid_model_from_combobox(combo_audit_llm, available_auditing_models)
-            
-            if not user_coding_llm or not user_audit_llm:
-                messagebox.showerror("Error", "Please select valid LLM models (not separators)")
-                return
+            # Get selected LLMs for correction mode
+            user_coding_llm = combo_coding_llm.get()
+            user_audit_llm = combo_audit_llm.get()
             
             # Check if any models are available
             if user_coding_llm == "No models available - configure API keys first" or user_audit_llm == "No models available - configure API keys first":

@@ -1,0 +1,12 @@
+1. Critical
+None
+
+2. Serious
+None
+
+3. Non-critical
+None
+
+4. Recommendations
+4.1 Consider adding a shebang line (e.g., `#!/usr/bin/env python3`) if this will be run as a standalone script
+4.2 The comment could be more concise or removed entirely as the code is self-explanatory
