@@ -1,0 +1,525 @@
+<title>Разумовская: 90 дней</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F4F2;
+  --paper:#FBFBFA;
+  --ink:#1F2326;
+  --muted:#5E6562;
+  --line:#D5D9D6;
+  --accent:#3F6B58;
+  --accent-soft:#E2EBE6;
+  --rust:#94553A;
+  --rust-soft:#F2E6DF;
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#15181A; --paper:#1C2023; --ink:#E6E8E6; --muted:#9BA39F; --line:#2E3438;
+    --accent:#7FB39B; --accent-soft:#1F2E28; --rust:#D08E6E; --rust-soft:#2E211B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#15181A; --paper:#1C2023; --ink:#E6E8E6; --muted:#9BA39F; --line:#2E3438;
+  --accent:#7FB39B; --accent-soft:#1F2E28; --rust:#D08E6E; --rust-soft:#2E211B;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.62 var(--body);padding-inline:20px;padding-block:0 64px}
+.wrap{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:56px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr;gap:0}nav.toc{display:none}}
+nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 24px);align-self:start;padding-top:48px;font-size:13px}
+nav.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:6px;counter-reset:t}
+nav.toc a{color:var(--muted);text-decoration:none;display:flex;gap:8px}
+nav.toc a::before{counter-increment:t;content:counter(t,decimal-leading-zero);font:12px var(--mono);color:var(--line)}
+nav.toc a:hover,nav.toc a:focus-visible{color:var(--accent)}
+main{max-width:800px;min-width:0}
+header.hero{padding-block:48px 28px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font:700 clamp(28px,5vw,44px)/1.1 var(--display);letter-spacing:-.01em;margin:12px 0 16px;text-wrap:balance}
+.lede{font-size:18px;color:var(--muted);max-width:62ch;margin:0}
+.meta{margin-top:18px;font:13px var(--mono);color:var(--muted)}
+section{padding-block:36px 8px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+h2{font:500 22px/1.25 var(--display);margin:0 0 14px;text-wrap:balance;scroll-margin-top:24px}
+h2 .n{font:500 13px var(--mono);color:var(--accent);display:block;margin-bottom:6px;letter-spacing:.06em}
+h3{font:600 17px/1.35 var(--body);margin:26px 0 8px}
+h4{font:600 15px/1.35 var(--body);margin:18px 0 6px}
+p,li{max-width:70ch}
+p{margin:0 0 12px}
+ul,ol{padding-left:22px;margin:0 0 14px}
+li{margin-bottom:6px}
+strong{font-weight:600}
+a{color:var(--accent)}
+.muted{color:var(--muted)}
+.callout{background:var(--accent-soft);border-left:3px solid var(--accent);padding:14px 18px;margin:16px 0;border-radius:0 6px 6px 0}
+.callout.warn{background:var(--rust-soft);border-left-color:var(--rust)}
+.callout p:last-child,.callout ul:last-child,.callout ol:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;margin:14px 0 18px;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:600px}
+th,td{text-align:left;vertical-align:top;padding:9px 12px;border-bottom:1px solid var(--line)}
+th{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+th.num{text-align:right}
+.pill{display:inline-block;font:500 11px var(--mono);padding:2px 7px;border-radius:99px;border:1px solid var(--accent);color:var(--accent);white-space:nowrap}
+.pill.b{border-color:var(--muted);color:var(--muted)}
+.pill.c{border-color:var(--rust);color:var(--rust)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px 14px;font-size:14px}
+.fact b{display:block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.phases{display:grid;gap:12px;margin:14px 0}
+.phase{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 18px}
+.phase h3{margin-top:0}
+.phase .when{font:12px var(--mono);color:var(--accent)}
+.gate{font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+pre{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;font:13px/1.5 var(--mono);white-space:pre-wrap;max-width:none}
+pre.mermaid{white-space:normal}
+code{font:13px var(--mono);background:var(--paper);border:1px solid var(--line);padding:1px 5px;border-radius:4px}
+.sources li{font-size:14px}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.kpi .fact ul{padding-left:18px;margin:0}
+.kpi .fact li{font-size:14px;margin-bottom:3px}
+</style>
+
+<div class="wrap">
+<nav class="toc" aria-label="Содержание">
+<ol>
+<li><a href="#s1">Кратко</a></li>
+<li><a href="#s2">Четыре плана: анализ</a></li>
+<li><a href="#s3">Исходные условия</a></li>
+<li><a href="#s4">Что продаём</a></li>
+<li><a href="#s5">Открытый вопрос: мощность</a></li>
+<li><a href="#s6">Клиенты и волна 1</a></li>
+<li><a href="#s7">Цифровые активы</a></li>
+<li><a href="#s8">AI-конвейер</a></li>
+<li><a href="#s9">Реклама: адаптивная и законная</a></li>
+<li><a href="#s10">Календарь 90 дней</a></li>
+<li><a href="#s11">Мониторинг и самокоррекция</a></li>
+<li><a href="#s12">Бюджет £10 000</a></li>
+<li><a href="#s13">KPI и критерии успеха</a></li>
+<li><a href="#s14">Риски</a></li>
+<li><a href="#s15">Первые 7 дней</a></li>
+<li><a href="#s16">Источники</a></li>
+</ol>
+</nav>
+
+<main>
+<header class="hero">
+<div class="eyebrow">Единый план · 90 дней · 28.09–26.12.2026 · бюджет £10 000</div>
+<h1>Ирина Разумовская: 90 дней до первых проектных заказов</h1>
+<p class="lede">Сводный план на основе четырёх независимых разработок (Claude, GPT, Gemini, Grok). Цель: за 90 дней довести до арт-консультантов и интерьерных бюро содержательное предложение, получить первые оплачиваемые разработки и 0–2 договора с авансом, и понять по данным, какой сегмент и какой визуал работают.</p>
+<div class="meta">Версия 1 · 27 сентября 2026 · условия: внешние расходы £10k, работу ведут Ирина и вы, Ирина даёт 6–10 часов в неделю, 10+ работ в наличии, галерейные договоры проверяются на первой неделе</div>
+</header>
+
+<section id="s1">
+<h2><span class="n">01</span>Кратко</h2>
+<ul>
+<li><strong>Все четыре плана сходятся в главном:</strong> покупатель не отель, а цепочка посредников (арт-консультант → hospitality-дизайнер/FF&amp;E → архитектор → представитель владельца). Нужен «пакет для закупщика» с реальными размерами, сроками и правилами цены, именной список организаций и визуальное доказательство «её работа стоит в вашем типе пространства». AI служит конвейером: разведка, рендеры, письма, разбор ответов, коррекция каждые две недели.</li>
+<li><strong>Расходятся в темпе и риске.</strong> GPT самый осторожный (проверенные факты, 20 организаций, реклама 5%), Gemini самый агрессивный (деанонимизация, рассылка на 500–1000 адресов, самомодифицирующийся сайт), Grok и мой план посередине с 12-месячным горизонтом. Единый план берёт структуру и проверенные факты GPT, офферы и промпты Grok, визуальные идеи Gemini в законной форме и гейты из моего плана, сжатые до 90 дней.</li>
+<li><strong>Продаём три вещи:</strong> пилот из готовых работ (10+ в наличии, поставка 2–6 недель), согласованную серию 8–30 работ (16–28 недель) и site-specific инсталляцию (12–24 недели). Панели с производственным партнёром не входят в 90 дней. Разработка концепции для клиента платная и засчитывается в заказ.</li>
+<li><strong>Три волны outreach:</strong> 30 → 40 → 50 организаций, 120–150 за 90 дней, каждое письмо с одной визуализацией и проверкой человеком. Плюс три отраслевых события в Лондоне внутри окна (Independent Hotel Show 5–6.10, Decorex 11–14.10, HIX + AHEAD Europe 25–26.11) и музейная соло KORE в Westerwald как информационный повод.</li>
+<li><strong>Производственная мощность — открытый вопрос,</strong> который план обозначает, но которым не ограничивается: пилоты идут со склада, серии котируются с честными сроками и поэтапной поставкой, а на 63-й день, когда будет видна воронка, принимается решение о маршруте масштабирования (очередь и цена, ассистенты, производственный партнёр).</li>
+<li><strong>Цель на день 90:</strong> 120–150 организаций охвачено, ≥15 содержательных ответов, ≥12 встреч, ≥6 квалифицированных возможностей, 2–4 оплачиваемые разработки, 0–2 договора с авансом, одна публикация в дизайн- или hospitality-издании.</li>
+</ul>
+</section>
+
+<section id="s2">
+<h2><span class="n">02</span>Четыре плана: где сходятся, где расходятся, что берём</h2>
+<div class="tbl"><table>
+<thead><tr><th>Критерий</th><th>Claude (мой)</th><th>GPT</th><th>Gemini</th><th>Grok</th><th>Единый план</th></tr></thead>
+<tbody>
+<tr><td>Горизонт</td><td>12 мес., фазы с гейтами</td><td>90 дней с датами</td><td>первый месяц</td><td>12 мес. + чеклист 30 дней</td><td>90 дней по неделям (GPT) + гейты (мой) + чеклист (Grok)</td></tr>
+<tr><td>Клиент</td><td>11 сегментов P1–P3</td><td>роли: плательщик, рекомендатель, утверждающий, закупщик</td><td>консультанты, HoReCa-бюро, ландшафт, девелоперы</td><td>цепочка консультант → дизайнер → архитектор → owner's rep; именные списки</td><td>цепочка Grok, роли GPT как поля CRM, именные списки GPT (проверены) и Grok (проверить)</td></tr>
+<tr><td>Оффер</td><td>3 линии, включая панели за м²</td><td>пилот 3–6 / коллекция 8–25 / программа; платная разработка</td><td>AI-подбор «30 работ на 95%»</td><td>A site-specific / B серии 8–30 / C collectible / D панели (год 2); trade pricing, 30/40/30</td><td>пилот со склада + серии + site-specific; платная разработка (GPT); trade pricing (Grok); панели вне 90 дней</td></tr>
+<tr><td>Объём outreach</td><td>150, затем 600–1000</td><td>120 проверенных, 10–15 в неделю</td><td>500–1000, автоматическая рассылка</td><td>400 ICP, 15–20 писем в неделю</td><td>120–150 в три волны, каждое письмо проверяет человек</td></tr>
+<tr><td>Визуализации</td><td>inpainting для топ-100, 3D для 30–50 работ</td><td>только точный объект или помеченный концепт</td><td>LoRA/ControlNet на текстурах; вписывать в чужие рендеры</td><td>библиотека 20 рендеров (5×4) + 1 на письмо; промпт</td><td>библиотека 20 (Grok) + правила маркировки (GPT) + LoRA как опция (Gemini) + AR для 8–12 работ</td></tr>
+<tr><td>Реклама</td><td>LinkedIn ABM + DCO, £800–2500/мес</td><td>5% времени, тест после сигналов; порог 300 в Matched Audience</td><td>DCO + деанонимизация (Clearbit, 6sense)</td><td>DCO, Document/Conversation Ads, first-party ретаргетинг</td><td>тест с потолком £2 000 после дня 35; без деанонимизации</td></tr>
+<tr><td>Веб-инструменты</td><td>AR, «Irina in Your Space», конфигуратор, консьерж</td><td>бриф + подборщик из реального каталога</td><td>WebAR + AI Room Planner</td><td>visualizer в месяце 4–5; не приложение</td><td>бриф-подборщик (GPT) + AR (дёшево); остальное в 2027</td></tr>
+<tr><td>Мониторинг</td><td>еженедельно, бандиты, правила остановки</td><td>14 дней, один эксперимент, без «самообучения» на малой выборке</td><td>sentiment, автоизменение сайта, heatmaps</td><td>14 дней, kill / amplify</td><td>цикл 14 дней, один эксперимент, kill / amplify, решения утверждает человек</td></tr>
+<tr><td>Бюджет</td><td>£1–3k/мес + разовые</td><td>£4–8k на 90 дней</td><td>нет</td><td>£10–18k в год</td><td>£10k на 90 дней, таблица в разделе 12</td></tr>
+<tr><td>Факты</td><td>сайт, RSS, Surface</td><td>самая строгая проверка: LOEWE 2018, KORE, цены PAD</td><td>без проверки</td><td>много деталей, часть не проверена</td><td>fact sheet GPT; LOEWE 2018 и цены PAD перепроверены мной</td></tr>
+</tbody></table></div>
+
+<h3>Что отброшено и почему</h3>
+<ul>
+<li><strong>Gemini:</strong> деанонимизация посетителей и «объявление, читающее клиента» (в UK и ЕС это нарушение, а в тесной дизайн-среде ещё и репутационный риск); автоматический поиск личных email; рассылка на 500–1000 адресов; сайт, который меняет себя без человека; обучение с подкреплением на 2–3 ответах. Оставлены: обучение LoRA на фактурах Ирины как опция, вписывание работ в фото конкретного проекта (только в личном письме), WebAR, агент-мониторинг новостей.</li>
+<li><strong>Grok:</strong> прямой выход в GCC, Design Miami, lookalike-аудитории, персональные AI-видео, панели с фабрикой. Всё верно для года, но не для 90 дней. Перенесено в план 2027.</li>
+<li><strong>Мой план:</strong> панели по цене за м², конфигуратор, AI-консьерж, CPD-семинар. Требуют либо производственного партнёра, либо входящего трафика, которого пока нет. Перенесено в Q1–Q2 2027; CPD готовится с января.</li>
+<li><strong>GPT:</strong> доля рекламы 5% слишком мала при ваших навыках и бюджете; поднята до ограниченного теста. Его осторожность к визуализациям принята как правило маркировки, но библиотека рендеров всё же строится: три плана из четырёх и практика B2B-продаж говорят, что без визуала письма не открывают.</li>
+</ul>
+</section>
+
+<section id="s3">
+<h2><span class="n">03</span>Исходные условия и календарные якоря</h2>
+<div class="facts">
+<div class="fact"><b>Бюджет</b>£10 000 только на внешние расходы. Исследование, письма, сайт, аналитику делаете вы с Ириной с помощью Claude / Claude Code.</div>
+<div class="fact"><b>Время Ирины</b>6–10 часов в неделю: утверждение рендеров и писем, 2–3 встречи или звонка, студийные визиты, участие в трёх событиях.</div>
+<div class="fact"><b>Наличие</b>10+ готовых работ. Значит, пилот для одного пространства можно предлагать со склада уже в октябре.</div>
+<div class="fact"><b>Галереи</b>Officine Saffi (ЕС), Aybar (США), Palaty. Условия прямых продаж уточняются на неделе 1. До ответа: прямые обращения только в UK и к международным консультантам с лондонским офисом; ЕС и США через галереи.</div>
+<div class="fact"><b>Информационный повод</b>KORE, музейная соло в Keramikmuseum Westerwald, открыта 24.09.2026, идёт до 10.01.2027. Лучший крючок первых 8 недель.</div>
+<div class="fact"><b>Ценовой ориентир</b>Публичные цены Palaty на PAD Paris 2025: Fertile Earths 70×50×50 см — €10 800, Tryptich 70×85×7 см — €5 400 (с VAT). Это выставочные запрашиваемые цены, не прайс.</div>
+</div>
+<h3>События внутри 90 дней (все в Лондоне, кроме KORE)</h3>
+<div class="tbl"><table>
+<thead><tr><th>Даты</th><th>Событие</th><th>Кто там</th><th>Как используем</th><th class="num">Расход</th></tr></thead>
+<tbody>
+<tr><td>5–6 окт</td><td>Independent Hotel Show, Olympia</td><td>Владельцы и дизайнеры бутик-отелей</td><td>Посетитель; 5–8 разговоров, сбор карточек для волны 2; кандидаты на пилот</td><td class="num">£50</td></tr>
+<tr><td>11–14 окт</td><td>Decorex, Olympia</td><td>Интерьерные дизайнеры, консультанты, поставщики</td><td>Trade-билет; встречи назначаются через приложение события заранее; 6–10 встреч</td><td class="num">£60</td></tr>
+<tr><td>25–26 ноя</td><td>HIX Europe + AHEAD Europe, ExCeL</td><td>5 000+ профессионалов гостиничного дизайна, операторы, девелоперы</td><td>8–10 заранее назначенных встреч; список финалистов AHEAD как источник волны 3</td><td class="num">£100</td></tr>
+<tr><td>до 10 янв</td><td>KORE, Keramikmuseum Westerwald</td><td>Музейная публика, немецкая керамическая среда</td><td>Повод для писем; опционально пресс/кураторский день в декабре с галереей SCHENKWEITZDÖRFER (Кёльн)</td><td class="num">£600 (опц.)</td></tr>
+</tbody></table></div>
+<p class="muted">Вне окна, но планируются с декабря: Collect (февраль–март 2027), Milan Design Week (апрель, через Officine Saffi), London Craft Week и Clerkenwell Design Week (май).</p>
+</section>
+
+<section id="s4">
+<h2><span class="n">04</span>Что продаём в 90 дней</h2>
+<p>Позиционирование (рабочая формула, утверждает Ирина): <strong>«Museum-grade ceramic sculpture and site-responsive series for lobbies, gardens and collections. London studio, RCA.»</strong> Не «декор для отелей». Слово «керамика» подаётся как архитектурный материал: негорючий, долговечный, с живой поверхностью.</p>
+<div class="tbl"><table>
+<thead><tr><th>Оффер</th><th>Состав</th><th>Срок</th><th>Коммерческий шаг</th><th>Источник идеи</th></tr></thead>
+<tbody>
+<tr><td><strong>1. Пилот со склада</strong></td><td>3–8 готовых работ, скомпонованных под одно пространство: лобби, клуб, люкс, внутренний двор</td><td>2–6 недель</td><td>Подборка → визит в студию или AR → счёт с депозитом. Самый быстрый путь к «installed at»</td><td>GPT (пилот 3–6) + факт «10+ в наличии»</td></tr>
+<tr><td><strong>2. Согласованная серия</strong></td><td>8–30 родственных работ одного языка (Grid, Barkskin, Built, Seeing Through) для коридоров, спа, ресторана, группы в саду. Семейство форм, не клоны</td><td>16–28 недель, поэтапная поставка</td><td>Платная разработка концепции £1 500–3 000, засчитывается в заказ; депозит 40%</td><td>Grok (оффер B) + GPT (платная разработка)</td></tr>
+<tr><td><strong>3. Site-specific</strong></td><td>1–5 крупных работ под конкретное место, с макетом (опыт: ARCHEO на фабрике Spode, ~3×2,6 м)</td><td>12–24 недели</td><td>Платная разработка с макетом £3 000–6 000, засчитывается; этапы 40/40/20</td><td>Grok (оффер A) + мой (Signature)</td></tr>
+<tr><td><strong>Настенные композиции</strong></td><td>Подмножество 1 и 2: Seeing Through, Grid, Tryptich как «стена» для коридоров и лаунжей. Выделено отдельно, потому что дизайнер думает стенами</td><td>как 1 или 2</td><td>Раскладка на плане стены в project pack</td><td>Мой + GPT</td></tr>
+<tr><td><span class="pill b">через галерею</span> Collectible design</td><td>Лампы и столики GRUZ, editions</td><td>8–16 недель</td><td>Направляем к Aybar/Palaty до выяснения условий</td><td>Grok (оффер C)</td></tr>
+<tr><td><span class="pill c">не в 90 дней</span> Архитектурные панели</td><td>Модули с производственным партнёром</td><td>—</td><td>Только одна разведывательная встреча в декабре, если воронка того потребует (раздел 05)</td><td>Мой + Grok (оффер D)</td></tr>
+</tbody></table></div>
+
+<h3>Правила цены (не прайс)</h3>
+<ul>
+<li><strong>Один уровень цен во всех каналах.</strong> Розничный ориентир берётся от галерейных выставочных цен (PAD Paris 2025: €10 800 за 70×50×50, €5 400 за триптих). Прямые B2B-продажи не должны подрывать галереи; это согласуется с ними на неделе 1.</li>
+<li><strong>Trade-условия для консультантов и дизайнеров:</strong> 15–20% от розницы (Grok предлагает 15–25%). Скидка за объём считается по семейству работ, а не «минус 5% за каждую следующую».</li>
+<li><strong>Платная разработка</strong> покрывает работу даже при отказе от производства; число итераций ограничено (две).</li>
+<li><strong>Отдельными строками:</strong> упаковка, страховка, доставка, монтаж, права на изображения. Депозит финансирует невозвратные затраты.</li>
+<li><strong>В каждом предложении:</strong> вес, крепление, поведение при пожаре (керамика негорючая; отдельно про частицы поверхности), уход, замена повреждённого элемента, indoor/outdoor-статус. Без этого консультант не возьмёт работу в спецификацию.</li>
+</ul>
+</section>
+
+<section id="s5">
+<h2><span class="n">05</span>Открытый вопрос: производственная мощность</h2>
+<div class="callout warn">
+<p><strong>Что нужно узнать у Ирины на неделе 1 (и честно записать в project pack как lead time):</strong></p>
+<ol>
+<li>Сколько работ среднего размера (40–70 см) реально выходит в месяц при нагрузке RCA: часы в студии, циклы печи, сушка, доля брака по собственной истории.</li>
+<li>Какое узкое место первое: время Ирины, объём печи, место для сушки и хранения, отделка.</li>
+<li>Готова ли она в принципе к ассистентам под авторским контролем (выпускники RCA — её же студенты), к студийным вариантам работ и к производственному партнёру для согласованных элементов серии.</li>
+<li>Какие работы из 10+ в наличии продаваемы сейчас, какие зарезервированы галереями, какие останутся в галерейной линии (Disciplined, Archaeology of Absence).</li>
+</ol>
+<p>Формула (из плана GPT): доступный объём = минимум из ограничений труда, печи, сушки, хранения и отделки, умноженный на фактический выход годных работ. Первый срок подтверждается тестовой партией, а не расчётом из часов.</p>
+</div>
+<p><strong>Почему план этим не ограничивается.</strong> Ни один из четырёх планов не предлагает продавать «200 одинаковых ваз». Реальный проектный спрос выглядит как 3–8 работ на пилот и 8–30 на серию с горизонтом полгода. Такой объём можно котировать сейчас, а закрывать поэтапно. Поэтому:</p>
+<ul>
+<li>Пилоты предлагаются со склада: мощность не нужна.</li>
+<li>Серии котируются с честными сроками 16–28 недель и поэтапной поставкой; депозит резервирует очередь.</li>
+<li>Outreach не сокращается из-за мощности: лучше иметь очередь и выбирать проекты, чем пустую воронку.</li>
+<li><strong>Гейт «день 63» (29 ноября):</strong> сумма квалифицированных возможностей в работах против цифры из формулы. Если спрос выше мощности, выбирается маршрут: (а) очередь и повышение цены, (б) ассистенты, (в) одна разведывательная встреча с производственным партнёром (UAP как производитель и посредник; мастерские Стока-он-Трента), (г) лицензируемые панели как отдельное решение Ирины на 2027.</li>
+</ul>
+</section>
+
+<section id="s6">
+<h2><span class="n">06</span>Клиенты и волна 1: 30 организаций</h2>
+<p>Оптимизируем не число адресов, а <strong>долю подходящих компаний, до которых дошло содержательное предложение</strong>. Ниже стартовый список для первых трёх недель: 20 организаций из плана GPT (проверены по первичным источникам 27.09.2026), 4 из плана Grok (мной перепроверены Minda Dowling и International Art Consultants; остальные проверить перед письмом), тёплые контакты Ирины. Интерес к Ирине, открытый бюджет и текущая закупка у них не установлены.</p>
+
+<h4>А. Тёплые двери (письма на неделе 1, крючок KORE)</h4>
+<div class="tbl"><table>
+<thead><tr><th>Организация</th><th>Связь</th><th>Что просим</th></tr></thead>
+<tbody>
+<tr><td>Rabih Hage Architects</td><td>Ellipsis, Cromwell Place, 2022</td><td>Разговор о текущих интерьерах; intro к одному текущему проекту</td></tr>
+<tr><td>Officine Saffi, Милан</td><td>Представительство с 2016, соло 2018</td><td>Условия прямых продаж в ЕС; intro к итальянским архитекторам и hospitality-клиентам; Milan Design Week 2027</td></tr>
+<tr><td>Aybar Gallery, Майами</td><td>Коллекция GRUZ (лампы, столики)</td><td>Условия по США; совместное предложение collectible design дизайнерам</td></tr>
+<tr><td>Palaty Gallery</td><td>PAD Paris 2025, Alcova Miami</td><td>Согласование цен и территорий; их дизайнерские контакты</td></tr>
+<tr><td>ROKSANDA</td><td>Falling in Line, флагман, 2023</td><td>Кейс с фото для project pack; intro к их дизайнерам интерьера и ритейла</td></tr>
+<tr><td>Nilufar, Милан</td><td>New Sculptural Presence, 2019</td><td>Проектная подборка для их архитекторов; условия продаж согласовать</td></tr>
+<tr><td>SCHENKWEITZDÖRFER, Кёльн</td><td>Boundaries of Metamorphosis, 2025</td><td>Разговор о немецких архитекторах и коллекциях; совместный день на KORE в декабре</td></tr>
+</tbody></table></div>
+
+<h4>Б. Арт-консультанты: UK и международные с лондонским офисом</h4>
+<div class="tbl"><table>
+<thead><tr><th>Организация</th><th>Почему</th><th>Маршрут</th><th>Статус</th></tr></thead>
+<tbody>
+<tr><td>Artelier (London, Bristol, UAE)</td><td>Комиссии скульптуры и керамических стен для Four Seasons London, 1 Hotels London, Aman AlUla, Raffles Diriyah</td><td>Куратор гостиничных проектов; 6–8 работ + настенный формат; они же вход в GCC без прямого выхода туда</td><td><span class="pill">проверено</span></td></tr>
+<tr><td>Artiq (London)</td><td>Belmond, Six Senses London, The Hoxton, Francis Hotel; есть официальная форма подачи портфолио</td><td>Artist submissions + письмо artist team; обозначить покупку и комиссии, не аренду</td><td><span class="pill">проверено</span></td></tr>
+<tr><td>ArtLink (London)</td><td>200+ проектов отелей и круизных судов в 40 странах</td><td>Art Sourcing Manager; авторская коллекция для нескольких зон одного объекта</td><td><span class="pill">проверено</span></td></tr>
+<tr><td>Minda Dowling Hotel Art Consultants (London)</td><td>С 1984; Nobu Portman Square, Belmond Cadogan, Corinthia, Four Seasons, Mandarin Oriental</td><td>Лично Minda Dowling; студийный визит</td><td><span class="pill">проверено</span></td></tr>
+<tr><td>HBA Art (London office)</td><td>Арт-программы гостиниц и резиденций; London principal указан на сайте</td><td>Art principal; спецификационный пакет под подходящий бриф</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>International Art Consultants (London, Paris)</td><td>30+ лет; фокус на корпоративных пространствах</td><td>Art strategy team; штаб-квартиры и представительские зоны</td><td><span class="pill">проверено</span></td></tr>
+<tr><td>Tatar Art Projects</td><td>Luxury hospitality с ведением производства</td><td>Project director; сначала уточнить географию проектов</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Veitenheimer</td><td>Независимый подбор искусства для hospitality</td><td>Руководитель; образцы + ясное распределение технических обязанностей</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Rise Art Advisory</td><td>Направления hospitality и workplace</td><td>Advisory team; процедуру включения художника уточнить</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Curate Art Group</td><td>Работа с несколькими объектами бренда</td><td>hello@ публично указан; уточнить долю бюджета на оригиналы</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Muzéo Pro (FR, UK)</td><td>Кейс Marriott Residences Kensington</td><td>B2B-команда арт-проектов; не путать с магазином репродукций</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Artisan Collective (UK)</td><td>Связывает отели с художниками, включая керамику</td><td>Проверить уровень и условия посредничества до письма</td><td><span class="pill b">резерв</span></td></tr>
+</tbody></table></div>
+
+<h4>В. Интерьерные бюро hospitality в Лондоне</h4>
+<div class="tbl"><table>
+<thead><tr><th>Организация</th><th>Почему</th><th>Маршрут</th><th>Статус</th></tr></thead>
+<tbody>
+<tr><td>Goddard Littlefair (London, Porto)</td><td>Hospitality, рестораны, spa</td><td>Design director / FF&amp;E lead; два варианта ансамбля под их опубликованный проект</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Martin Brudnizki Design Studio</td><td>Отели, клубы, резиденции; в команде заявлены арт-консультанты</td><td>In-house art consultant</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Conran and Partners</td><td>Park Hyatt Jakarta, серия ресторанов Rüya</td><td>Project / FF&amp;E lead; семейство работ для нескольких пространств</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>Richmond International</td><td>Люксовые отели, Лондон</td><td>Проверить текущие проекты и роль арт-подбора</td><td><span class="pill c">Grok, проверить</span></td></tr>
+<tr><td>David Collins Studio</td><td>Рестораны, отели, резиденции</td><td>Проверить, есть ли внутренний арт-подбор</td><td><span class="pill c">Grok, проверить</span></td></tr>
+<tr><td>AvroKO (лондонский офис)</td><td>Рестораны и отели с сильной материальностью</td><td>Проверить наличие лондонской команды</td><td><span class="pill c">Grok, проверить</span></td></tr>
+</tbody></table></div>
+
+<h4>Г. Публичное искусство и производители-посредники</h4>
+<div class="tbl"><table>
+<thead><tr><th>Организация</th><th>Почему</th><th>Маршрут</th><th>Статус</th></tr></thead>
+<tbody>
+<tr><td>Futurecity (UK)</td><td>Кураторские программы для девелоперов, Section 106</td><td>Curator; авторский пространственный проект с бюджетом разработки</td><td><span class="pill">GPT</span></td></tr>
+<tr><td>UAP</td><td>Подбор авторов, проектирование, производство и монтаж</td><td>Curatorial; одновременно кандидат в производственные партнёры для гейта дня 63</td><td><span class="pill">GPT</span></td></tr>
+</tbody></table></div>
+<p>Плюс 3 слота для владельцев бутик-отелей, встреченных на Independent Hotel Show. Итого около 30.</p>
+
+<h3>Как собираются волны 2 и 3 (по 40 и 50)</h3>
+<ul>
+<li><strong>От проектов, а не от названий.</strong> По каждому консультанту волны 1 изучить 3–5 опубликованных проектов, выписать владельца, дизайнера, оператора, закупщика, проверить каждого по его сайту (метод GPT). Карточка объекта связывает участников и не даёт посчитать один отель дважды.</li>
+<li><strong>Источники сигналов:</strong> Hotel Designs, Sleeper, Dezeen, Frame, Hospitality Interiors; финалисты AHEAD Europe 2026 (объявляются к HIX); победители SBID и Restaurant &amp; Bar Design Awards; списки участников Decorex и HIX (для исследования, не для массовой рассылки).</li>
+<li><strong>Оценка приоритета (GPT):</strong> 30 баллов соответствие портфолио и типа объектов, 25 действующий проектный сигнал, 20 практика заказа авторской скульптуры, 15 доступный путь к принимающему решение, 10 география. Модель предлагает оценку с источниками; человек проверяет первые 30 карточек и все приоритетные.</li>
+<li><strong>Оценка эстетического соответствия</strong> (мой план): LLM с изображениями сравнивает портфолио бюро с работами Ирины по материальности, фактуре, палитре, отношению к истории места. Это отсекает «все дизайнеры отелей» до «тех, чьи проекты уже похожи на её мир».</li>
+<li><strong>Сегменты, отложенные до 2027:</strong> GCC напрямую (идём через Artelier и HBA), США напрямую (через Aybar), Азия, круизные линии, healthcare.</li>
+</ul>
+</section>
+
+<section id="s7">
+<h2><span class="n">07</span>Цифровые активы: что должно существовать к дню 14</h2>
+<div class="tbl"><table>
+<thead><tr><th>Актив</th><th>Содержание</th><th>Кто делает</th><th>Срок</th></tr></thead>
+<tbody>
+<tr><td><strong>Fact sheet</strong></td><td>Выверенная биография: LOEWE финалист 2018 (не 2019), Westerwald 1-я премия 2024, RCA Associate Lecturer, коллекции; правильные написания Carwan / Argilos и ROKSANDA; совместные показы не называть персональными (список исправлений из плана GPT)</td><td>Вы + Ирина</td><td>день 3</td></tr>
+<tr><td><strong>Project pack</strong> (PDF EN, 12–16 стр., плюс версия ≤10 стр. для LinkedIn Document Ads)</td><td>1 стр. об авторе с наградами как снижением риска; «уже в пространствах»: Roksanda, Cromwell Place / Rabih Hage, ARCHEO / Spode, GRUZ / Aybar, Nilufar MDW; 12 работ с размерами, весом, материалом, креплением, наличием; 6 концепт-визуализаций с пометкой; три способа работы и сроки; условия, логистика, уход, замена элемента; форма брифа, QR на AR и запись в студию</td><td>Вы с Claude; редактура носителем £300</td><td>v1 день 14, v2 после Decorex день 21</td></tr>
+<tr><td><strong>Раздел сайта «For Architects &amp; Art Consultants»</strong> (или <code>/commissions</code>)</td><td>Фильтр «настенное / отдельно стоящее / группа», реальные размеры и наличие, кейсы, сроки, форма брифа с полями: тип объекта, зона, количество, страна, срок, бюджет или «обсудить». Страница подстраивается под выбранный тип объекта и UTM-сегмент</td><td>Вы с Claude Code</td><td>день 14</td></tr>
+<tr><td><strong>Библиотека 20 рендеров</strong></td><td>5 работ × 4 среды (лобби, спа, сад/двор, лестница или коридор) на основе реальных фото; каждая проверена Ириной; подпись «Concept visualisation. Subject to artist approval, dimensions and technical design»</td><td>Вы + Ирина; Flux Kontext / Midjourney / Gemini Image с референсом</td><td>день 12</td></tr>
+<tr><td><strong>Фотосъёмка «в пространстве» и процесс</strong></td><td>Полдня в архитектурно сильном интерьере (аренда локации) + 20 минут процесса в студии: лепка, глазурь, открытие печи. Вертикальные ролики режет AI</td><td>Фотограф £900 + локация £600</td><td>день 10</td></tr>
+<tr><td><strong>3D-сканы и AR</strong></td><td>8–12 работ через Polycam / RealityScan → GLB и USDZ → страницы с <code>model-viewer</code>: консультант ставит работу в реальном масштабе через телефон, без установки приложения</td><td>Вы; £100</td><td>день 21</td></tr>
+<tr><td><strong>Бриф-подборщик</strong> (Project Collection Builder по GPT)</td><td>Тип объекта → настенное или отдельно стоящее → количество и размеры → страна → срок → бюджет или «обсудить» → 3–6 реальных работ с объяснением → сохранить и переслать коллегам → бриф. Контакты не требуются до просмотра работ. Каждая сессия попадает в CRM</td><td>Вы с Claude Code (статический сайт + Supabase + Claude API)</td><td>v1 день 35</td></tr>
+<tr><td><strong>AEO-слой</strong></td><td>FAQ «Does Irina Razumovskaya take commissions for hotels and architectural spaces?», schema.org Person/Organization, одинаковое имя на RCA, Artsy, галереях, сайте; проверка живыми запросами в ChatGPT, Claude, Perplexity, Gemini на день 30 и день 90</td><td>Вы</td><td>день 14</td></tr>
+<tr><td><strong>Сэмпл-киты</strong></td><td>20 наборов из 6 плиток 12×12 см с восемью характерными поверхностями + карточка с QR на AR и персональную подборку. Отправляются только ответившим</td><td>Ирина (материалы и обжиг £300) + доставка £400</td><td>готовы к дню 35</td></tr>
+<tr><td><strong>LinkedIn</strong></td><td>Профиль Ирины переписан под «sculptor for spatial commissions»; 2 содержательных поста в неделю с дня 15 (черновики готовит Claude по интервью, Ирина правит голос); страница студии не нужна</td><td>Вы + Ирина</td><td>день 7, далее постоянно</td></tr>
+<tr><td><strong>CRM и аналитика</strong></td><td>HubSpot Free или Notion: организации, люди, объекты, сделки отдельно; поля «плательщик / рекомендатель / утверждающий / закупщик», «возражение», «вариант эксперимента», «источник и дата проверки», список отказов. GA4, Microsoft Clarity, UTM-дисциплина, отдельный почтовый домен с SPF/DKIM/DMARC и прогревом</td><td>Вы с Claude Code</td><td>день 7</td></tr>
+</tbody></table></div>
+<p class="muted">Не строим в 90 дней: нативное приложение, конфигуратор панелей, AI-консьерж (только если после рекламного теста появится входящий трафик), персональные AI-видео.</p>
+</section>
+
+<section id="s8">
+<h2><span class="n">08</span>AI-конвейер: семь контуров</h2>
+<p>Принцип из всех четырёх планов: модель готовит сырьё и предлагает решения, человек утверждает всё, что уходит наружу, и всё, что касается цен, обещаний и художественных материалов. У каждого важного факта есть источник и дата.</p>
+<div class="tbl"><table>
+<thead><tr><th>Контур</th><th>Вход → выход</th><th>Инструменты</th><th>Контроль</th></tr></thead>
+<tbody>
+<tr><td><strong>A. Разведка и оценка</strong></td><td>URL компании + ICP → карточка: роль, 3 проекта с датами, опыт заказа скульптуры, кому писать, соответствие, неизвестное, гипотеза предложения (промпт 1 из плана GPT); еженедельный мониторинг сигналов: назначено бюро, реконструкция, новый контракт, нанят арт-куратор</td><td>Claude с веб-поиском; Sales Navigator; Apollo или Clay для подтверждённых корпоративных контактов</td><td>Первые 30 карточек и все P1 проверяет человек; email не угадывать; завершённый проект не считать активной закупкой</td></tr>
+<tr><td><strong>B. Рендеры in situ</strong></td><td>Реальное фото или 3D-скан работы + разрешённое фото среды → концепт-визуализация с сохранением геометрии, фактуры и масштаба</td><td>Flux Kontext, Midjourney, Gemini Image с референсом; опция: LoRA на 40–60 фото поверхностей Ирины, если генераторы искажают глазурь (идея Gemini)</td><td>Ирина сравнивает с оригиналом; подпись «концепт»; чужие фото проекта используются только в личном письме и никогда публично; по запросу удаляются</td></tr>
+<tr><td><strong>C. Письма и последовательность</strong></td><td>Карточка + 3 работы + 1 рендер → письмо ≤120 слов от Ирины; через 7–10 рабочих дней одно полезное дополнение с другим визуалом; через 10–14 дней короткое закрытие; стоп</td><td>Claude; lemlist или Instantly для последовательностей и учёта ответов (или Gmail + скрипты)</td><td>Каждое письмо читает человек; не писать нескольким сотрудникам одной компании одновременно; при любом возражении стоп и запись в список отказов</td></tr>
+<tr><td><strong>D. Классификация ответов</strong></td><td>Ответ → категория (интерес, просит параметры, бюджет, срок, не та роль, не тот стиль, техническое ограничение, партнёрство, отказ, неясно) + опорная фраза + извлечённые количество, дата, бюджет (промпт 5 GPT)</td><td>Claude, запись в поле CRM «возражение»</td><td>Вежливость не считается намерением; черновик ответа не отправляется автоматически</td></tr>
+<tr><td><strong>E. Аналитик раз в 14 дней</strong></td><td>Экспорт CRM, затраты, возраст сделок, журнал экспериментов → одностраничный разбор: узкое место, альтернативное объяснение, один эксперимент на следующий цикл с контролем, лимитом и правилом остановки (промпт 6 GPT + правила kill/amplify Grok)</td><td>Claude; дашборд в Notion или Sheets, собранный Claude Code</td><td>Модель не меняет цены, сообщения и бюджеты; решение принимаете вы, художественную часть утверждает Ирина</td></tr>
+<tr><td><strong>F. Контроль правдивости</strong></td><td>Любой материал перед выпуском → сверка с fact sheet: годы, статусы финалист/победитель, названия, подписи концептов, размеры, наличие, цены, права на изображения (промпт 7 GPT)</td><td>Claude</td><td>Отсутствие найденной ошибки не доказательство; спорное уходит Ирине</td></tr>
+<tr><td><strong>G. Контент и PR</strong></td><td>Интервью с Ириной → посты LinkedIn (2/нед), питчи в Hotel Designs, Sleeper, Dezeen, Wallpaper*, The World of Interiors под угол каждого издания; видео процесса → ролики с субтитрами</td><td>Claude; CapCut или Descript</td><td>Цель: одна публикация в дизайн- или hospitality-издании, не десять в керамических блогах</td></tr>
+</tbody></table></div>
+
+<h3>Три рабочих промпта (остальные четыре берём как есть из приложения В плана GPT)</h3>
+<h4>Рендер (контур B)</h4>
+<pre>Photorealistic interior photograph of a [quiet luxury hotel lobby / spa courtyard / villa garden / hotel corridor].
+Place the ceramic sculpture from the reference image on [a low stone plinth / the wall at eye level] at [position].
+Keep the sculpture's geometry, proportions, peeling glaze, cracks and colour exactly as in the reference.
+Match the room's lighting (2700K) and material palette. Do not invent a second sculpture. No text, no watermark.
+Output note for the file: "Concept visualisation. Subject to artist approval, dimensions and technical design."</pre>
+<h4>Первое письмо (контур C)</h4>
+<pre>Напиши английское письмо до 120 слов от имени Ирины Разумовской для [имя], [роль], [компания].
+Вход: проверенная карточка компании; факт о проекте [проект, источник, дата]; 3 выбранные работы с размерами;
+утверждённый fact sheet; ссылка на project pack; один рендер.
+Тон: коллега и Associate Lecturer RCA, не продавец. Первое предложение о их проекте, не о нас.
+Второе: одна точная причина, почему архитектурная геометрия и живая поверхность её керамики
+уместны именно в этом пространстве. Третье: прилагаю один рендер и подборку.
+CTA: 20 минут в студии в SE1 или по видео. Один следующий шаг.
+Запрещено: synergy, elevate, unique opportunity; выдуманные знакомства, гарантии, эксклюзивность,
+опыт гостиничных поставок; бесплатная полноценная разработка; знание внутренних планов компании.
+Если проект завершён, объясни, чем подход релевантен их будущим проектам.
+После письма перечисли все фактические утверждения и их источники.</pre>
+<h4>Аналитик раз в 14 дней (контур E)</h4>
+<pre>Вход: обезличенный экспорт CRM по неделям и сегментам; затраты; возраст сделок; журнал экспериментов;
+ограничения производства. Сначала проверь дубли, пропуски, знаменатели.
+Покажи абсолютные числа и доли на каждом этапе воронки; отдели новые возможности от созревших когорт.
+Назови: 1) какие сегменты, темы писем и визуалы дают содержательные ответы; 2) что остановить;
+3) что усилить; 4) самое вероятное узкое место и альтернативное объяснение; 5) один эксперимент
+на следующие 14 дней: сегмент, контроль, изменение, метрика, лимит денег, срок, правило остановки.
+Не объявляй причинный эффект без корректного сравнения. Если данных мало, скажи это и предложи
+качественные интервью. Не меняй цены, тексты клиентам, бюджеты и художественные материалы.
+Не предлагай «больше постов в Instagram».</pre>
+</section>
+
+<section id="s9">
+<h2><span class="n">09</span>Реклама: адаптивная и законная</h2>
+<p>Идея «объявление узнаёт клиента, пока он смотрит» в единый план входит в трёх законных механизмах (разбор GPT и «легальная версия» Grok). Слежка за конкретным человеком, определение личности по IP и скрытые досье исключены: в UK и ЕС это нарушение, а среда тесная.</p>
+<ol>
+<li><strong>Платформа выбирает вариант до показа.</strong> LinkedIn и Meta комбинируют утверждённые модули: фото работы / рендер лобби / рендер сада / рендер спа × заголовки под персону (консультант / FF&amp;E / архитектор / девелопер) × 3 CTA (pack / студия / AR). Мы подаём 8 заголовков и 8 текстов, сгенерированных и отобранных с Claude; платформа находит победителей.</li>
+<li><strong>Страница реагирует на явный выбор.</strong> Посетитель выбирает тип объекта, зону, количество и срок и получает подходящую подборку и форму брифа. UTM-сегмент и страна задают язык и кейсы. Это персонализация внутри сессии без попытки угадать личность.</li>
+<li><strong>First-party ретаргетинг.</strong> Кто смотрел AR или выбрал «лобби» в подборщике, видит креатив про лобби. Согласие собирается через баннер на своём сайте по требованиям ICO.</li>
+</ol>
+<div class="callout">
+<p><strong>Условия запуска теста (день 35, после первого разбора):</strong> project pack и раздел сайта живы; matched audience на LinkedIn собрана из компаний волн 1–3 плюс должности и достигает порога 300 участников (GPT); лимит £2 000 на 4–6 недель; формат: Document Ads с 10-страничной версией pack и лид-формой, Conversation Ads на 30 приоритетных компаний, ретаргетинг. Meta только на ретаргетинг. Правило: лимит израсходован без квалифицированной возможности → назад к сообщению и таргетингу, а не к увеличению бюджета. Ориентир стоимости квалифицированного лида в этой аудитории — сотни фунтов, не десятки; это нормально.</p>
+</div>
+</section>
+
+<section id="s10">
+<h2><span class="n">10</span>Календарь 90 дней</h2>
+<div class="phases">
+<div class="phase"><div class="when">Дни 1–14 · 28 сентября – 11 октября · Фаза 0</div><h3>Основание и тёплые двери</h3>
+<ul>
+<li><strong>Неделя 1:</strong> интервью с Ириной по мощности, ценам, готовности к ассистентам (раздел 05); инвентаризация 10+ работ с ID, размерами, весом, наличием; fact sheet; письма галереям об условиях; 7 тёплых писем с крючком KORE; ICP и правила оценки; CRM, почтовый домен, GA4/Clarity; профиль LinkedIn; 30 карточек волны 1 (агент + ручная проверка).</li>
+<li><strong>Неделя 2:</strong> фотосъёмка в пространстве и процесса (день 8–10); 20 рендеров (до дня 12); project pack v1 и раздел сайта (день 14); юрист: шаблон договора комиссии и чтение галерейных договоров; Independent Hotel Show 5–6.10 как посетитель; Decorex 11.10 с назначенными через приложение встречами; начало изготовления сэмпл-китов.</li>
+</ul>
+<div class="gate">Гейт день 14: сайт отвечает спецификатору за пять минут; pack v1 готов; 30 карточек с подтверждёнными каналами; ответ галерей получен или зафиксировано «UK-only до ответа». Холодные письма без этого не начинаются; тёплые уже ушли.</div></div>
+
+<div class="phase"><div class="when">Дни 15–35 · 12 октября – 1 ноября · Фаза 1</div><h3>Волна 1: 30 организаций</h3>
+<ul>
+<li>Decorex 12–14.10: 6–10 встреч; pack v2 по обратной связи (день 21).</li>
+<li>Волна 1: 10 писем в неделю по контурам A–C, вариант закрепляется на уровне компании: «каталог автора» против «подборка под тип объекта» (единственное различие, GPT).</li>
+<li>AR-страницы для 8–12 работ живы (день 21). LinkedIn 2 поста в неделю.</li>
+<li>5–8 интервью с дизайнерами и консультантами из круга RCA и Decorex: «что нужно, чтобы включить автора в спецификацию». Эти ответы калибруют pack и письма.</li>
+<li>Студийный вечер 1: четверг 22 октября, 8–12 гостей, открытие печи, если совпадёт с циклом.</li>
+<li>Пилот со склада предлагается первым же заинтересованным (бутик-отель, клуб, флагман, сад виллы).</li>
+</ul>
+<div class="gate">Гейт день 35 (1 ноября), первый разбор аналитика: ≥30 организаций охвачено, доля ответов ≥8%, ≥3 встречи назначены, известно, какой визуал открывает письма. Да → волна 2 и рекламный тест. Нет → ручной разбор, переписать сообщение и сегмент, объём не увеличивать.</div></div>
+
+<div class="phase"><div class="when">Дни 36–63 · 2 – 29 ноября · Фаза 2</div><h3>Волна 2, рекламный тест, HIX</h3>
+<ul>
+<li>Волна 2: 40 организаций с исправленным предложением (источники: проекты консультантов волны 1, Decorex, финалисты AHEAD).</li>
+<li>Рекламный тест по условиям раздела 09; бриф-подборщик v1 живой (день 35).</li>
+<li>Сэмпл-киты 15–20 ответившим с QR на персональную подборку.</li>
+<li>PR-питчи в 6 изданий: угол «музейная соло в Германии + RCA + керамика как архитектура + первый пилот».</li>
+<li>Платная разработка концепции предлагается первым 2–4 квалифицированным возможностям; сметы с честными сроками.</li>
+<li>Студийный вечер 2: вторник 24 ноября, накануне HIX, для приехавших в Лондон. HIX + AHEAD Europe 25–26.11: 8–10 назначенных встреч.</li>
+<li>Второй разбор аналитика на день 49 (15 ноября).</li>
+</ul>
+<div class="gate">Гейт день 63 (29 ноября): ≥70 организаций; ответы ≥10%; ≥8 встреч; ≥4 квалифицированные возможности; ≥1 оплаченная разработка. Здесь же <strong>решение о мощности</strong>: воронка в работах против формулы из раздела 05 → маршрут (очередь и цена / ассистенты / разведывательная встреча с UAP или мастерской).</div></div>
+
+<div class="phase"><div class="when">Дни 64–90 · 30 ноября – 26 декабря · Фаза 3</div><h3>Волна 3, закрытие, план 2027</h3>
+<ul>
+<li>Волна 3: до 50 организаций только при положительных сигналах волн 1–2; иначе повторный заход по ответившим с новым визуалом.</li>
+<li>Опционально: день на KORE в Westerwald с прессой и SCHENKWEITZDÖRFER, немецкие архитекторы (до 10 января).</li>
+<li>Закрытие оплачиваемых разработок и депозитов до праздничного замедления (~18 декабря); согласованные напоминания на январь для «интерес есть, закупка позже».</li>
+<li>Третий разбор аналитика день 77 (13 декабря); итоговый на день 90: экономика, стоимость квалифицированной возможности, решение по каждому сегменту.</li>
+<li>План Q1 2027: Collect, Milan Design Week через Officine Saffi, CPD-семинар, панели с партнёром (если гейт дня 63 указал на это), GCC и США через галереи и консультантов.</li>
+</ul>
+<div class="gate">День 90: цели раздела 13; следующий бюджет и график по каждому проекту понятны.</div></div>
+</div>
+<p class="muted">Загрузка команды: 40% исследование и адресная работа, 25% партнёры и встречи, 20% материалы и сайт, 10% аналитика, 5% реклама (распределение GPT, пересматривается на день 35).</p>
+</section>
+
+<section id="s11">
+<h2><span class="n">11</span>Мониторинг и самокоррекция</h2>
+<pre class="mermaid">
+flowchart LR
+  A[Карточки организаций<br/>и сигналы] --> B[Письма, рендеры,<br/>реклама, события]
+  B --> C[Ответы, визиты,<br/>AR, брифы, встречи]
+  C --> D[Классификация<br/>и CRM]
+  D --> E[Аналитик<br/>раз в 14 дней]
+  E --> F[Одно решение:<br/>сегмент, текст,<br/>визуал, бюджет]
+  F --> A
+  E --> G[День 63:<br/>решение о мощности]
+</pre>
+<h3>Воронка и определения</h3>
+<p>Проверенная организация → состоявшийся контакт → содержательный ответ → квалифицированная возможность → бриф → оплаченная разработка → договор с авансом → поставка → повторный заказ. Организации, люди, объекты и сделки хранятся отдельно: один отель, пришедший через дизайнера и консультанта, не считается дважды.</p>
+<p><strong>Квалифицированная возможность</strong> (GPT): конкретный объект, релевантный собеседник, интерес к нескольким работам, известная стадия закупки, реалистичный срок, бюджет известен либо известна процедура его согласования. «Красиво, будем иметь в виду» учитывается отдельно.</p>
+<h3>Ритм</h3>
+<ul>
+<li><strong>Ежедневно (10 минут):</strong> формы, доставляемость, новые ответы, отказы, просроченные задачи. Смысл предложения по каждому клику не меняем.</li>
+<li><strong>Еженедельно (30 минут):</strong> таблица переходов по сегментам и причинам потери; 5 ручных аудитов карточек агента; все крупные возможности.</li>
+<li><strong>Раз в 14 дней (90 минут, дни 35, 49, 63, 77, 90):</strong> разбор аналитика → один эксперимент → решение продолжить / исправить / остановить. Ирина участвует: она видит, какие работы и визуалы вызывают отклик, и корректирует художественную часть.</li>
+<li><strong>День 63:</strong> мощность, маржа, партнёрские условия, состав сегментов.</li>
+</ul>
+<h3>Правила</h3>
+<div class="tbl"><table>
+<thead><tr><th>Тип</th><th>Правило</th></tr></thead>
+<tbody>
+<tr><td>Остановить</td><td>Любое возражение против контакта → стоп и список отказов. Проблема с доставляемостью → пауза партии. 30 подходящих компаний и 14 дней без содержательного ответа → ручной разбор до расширения. Креатив с CTR ниже медианы две недели подряд → замена. Рекламный лимит без квалифицированной возможности → назад к сообщению.</td></tr>
+<tr><td>Усилить</td><td>Любой запрос техспеков, pack или сроков → этот сегмент и визуал масштабировать. Визуал, давший ответы, идёт в следующую волну как основной.</td></tr>
+<tr><td>Не делать</td><td>Не включать «самообучающийся маркетинг» на малой выборке: 2 ответа против 0 не определяют победителя. Не менять несколько факторов одновременно. Не считать время на странице и открытия писем намерением купить. Не путать число модулей, число работ и число объектов.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s12">
+<h2><span class="n">12</span>Бюджет £10 000 (внешние расходы, 90 дней)</h2>
+<div class="tbl"><table>
+<thead><tr><th>Статья</th><th>Что входит</th><th class="num">£</th></tr></thead>
+<tbody>
+<tr><td>Фото- и видеосъёмка</td><td>Полдня фотографа в арендованном интерьере + процесс в студии</td><td class="num">1 500</td></tr>
+<tr><td>3D-сканы и AR</td><td>Polycam Pro на 3 месяца, хостинг моделей</td><td class="num">100</td></tr>
+<tr><td>Сэмпл-киты</td><td>Материалы и обжиг 20 наборов, упаковка, доставка</td><td class="num">700</td></tr>
+<tr><td>Печать</td><td>30 экземпляров project pack, карточки для китов</td><td class="num">200</td></tr>
+<tr><td>Инструменты, 3 месяца</td><td>Sales Navigator, Apollo или Clay, почтовый инструмент, Claude API и генерация изображений, домен и хостинг, CRM</td><td class="num">1 300</td></tr>
+<tr><td>Рекламный тест</td><td>LinkedIn Document / Conversation Ads, ретаргетинг; потолок, запуск только по условиям раздела 09</td><td class="num">2 000</td></tr>
+<tr><td>События в Лондоне</td><td>Билеты IHS, Decorex, HIX; два студийных вечера на 8–12 гостей; гостеприимство</td><td class="num">1 300</td></tr>
+<tr><td>Westerwald (опционально)</td><td>Поездка на KORE: пресса, куратор, галерея в Кёльне</td><td class="num">600</td></tr>
+<tr><td>Редактура</td><td>Носитель английского: pack, раздел сайта, три эталонных письма</td><td class="num">300</td></tr>
+<tr><td>Юрист</td><td>1–2 часа: шаблон договора комиссии и платной разработки, чтение галерейных договоров</td><td class="num">500</td></tr>
+<tr><td>Резерв</td><td>Непредвиденное: повторная съёмка, срочная доставка, дополнительная встреча</td><td class="num">1 500</td></tr>
+<tr><td><strong>Итого</strong></td><td></td><td class="num"><strong>10 000</strong></td></tr>
+</tbody></table></div>
+<p>Если бюджет придётся сжать: без поездки в Westerwald и с рекламой £1 000 план стоит £7 400 и не теряет структуры. Если появится ещё £2–3k, они идут на съёмку первого установленного пилота и на профессиональную PR-поддержку одной публикации, а не на рекламу.</p>
+<p class="muted">Не включено: производство работ, международные поездки кроме Westerwald, инженерные расчёты крепления, стоимость вашего времени. Экономика заказа считается по формуле GPT: выручка без VAT минус материалы, обжиг, труд, брак, упаковка, логистика, монтаж, комиссии, привлечение. Пример из его плана: при вкладе £19k на проект и лимите привлечения 20% допустимая стоимость квалифицированной возможности около £380 при вероятности выигрыша 10%.</p>
+</section>
+
+<section id="s13">
+<h2><span class="n">13</span>KPI и критерии успеха</h2>
+<div class="kpi">
+<div class="fact"><b>День 30</b><ul><li>Активы разделa 07 живы</li><li>30 организаций охвачено</li><li>≥3 содержательных ответа, ≥2 встречи</li><li>IHS и Decorex: ≥8 разговоров</li><li>≥3 тёплых контакта ответили</li><li>AEO-проверка в 4 моделях сделана</li></ul></div>
+<div class="fact"><b>День 60</b><ul><li>70 организаций; ответы ≥10%</li><li>≥8 встреч или студийных визитов</li><li>≥4 квалифицированные возможности</li><li>≥1 оплаченная разработка</li><li>HIX: ≥8 назначенных встреч</li><li>Есть данные рекламного теста</li></ul></div>
+<div class="fact"><b>День 90</b><ul><li>120–150 организаций</li><li>≥15 содержательных ответов, ≥12 встреч</li><li>≥6 квалифицированных возможностей</li><li>2–4 оплаченные разработки</li><li>0–2 договора с авансом</li><li>1 публикация или подтверждённый материал</li><li>Известно, какой визуал и сегмент работают</li><li>Выбран маршрут по мощности</li></ul></div>
+</div>
+<p><strong>Ориентиры, а не обещания.</strong> Цикл крупного проекта 6–12 месяцев, поэтому отсутствие подписанного договора на день 90 само по себе не провал; провал — это отсутствие содержательных ответов и встреч. Правило из плана Grok: если через 90 дней есть только рост подписчиков и ноль встреч, менять оффер и список, а не добавлять контент. Если к марту нет ни одного брифа, сузить географию до Лондона и работать только через тёплые галерейные intro.</p>
+</section>
+
+<section id="s14">
+<h2><span class="n">14</span>Риски</h2>
+<div class="tbl"><table>
+<thead><tr><th>Риск</th><th>Мера</th></tr></thead>
+<tbody>
+<tr><td>Галерейные договоры запрещают прямые продажи в ЕС и США</td><td>Уточнить на неделе 1; до ответа UK-only; в любом случае предлагать галереям совместные проектные продажи и комиссию, а не обход</td></tr>
+<tr><td>Размывание бренда до «декоратора для отелей»</td><td>Отдельный нарратив для спецификаторов; галерейные серии не тиражировать; единый уровень цен; каждый текст утверждает Ирина</td></tr>
+<tr><td>Спрос превышает мощность</td><td>Раздел 05: пилоты со склада, честные сроки, депозит резервирует очередь, гейт дня 63</td></tr>
+<tr><td>AI-визуализации искажают работы или воспринимаются как реальные установки</td><td>Только реальные фото и 3D; подпись «концепт»; проверка Ириной; в портфолио нет вымышленных установок и отзывов</td></tr>
+<tr><td>Право: PECR/GDPR, ICO по cookies, немецкие правила холодных писем</td><td>Корпоративные адреса, отписка, законный интерес, список отказов; для Германии LinkedIn и intro вместо холодного email; юрист на неделе 2</td></tr>
+<tr><td>Репутация в тесном сообществе</td><td>Малые объёмы, релевантность, проверка человеком, три касания и стоп</td></tr>
+<tr><td>Технические требования: пожар, крепление, вандализм, улица</td><td>Техфайл; не заявлять пригодность к улице без испытаний; инженер по креплению для крупных работ</td></tr>
+<tr><td>Праздничное замедление в декабре</td><td>Волна 3 стартует до 7 декабря; на январь ставятся согласованные напоминания</td></tr>
+<tr><td>Ошибки в фактах (LOEWE 2019, Carson, Roxanda)</td><td>Fact sheet на день 3; контур F перед каждым выпуском</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s15">
+<h2><span class="n">15</span>Первые 7 дней: 28 сентября – 4 октября</h2>
+<ol>
+<li><strong>Пн 28.09.</strong> Интервью с Ириной: мощность, цены, ассистенты, какие серии для спецификаторов, какие остаются галерейными. Письма Officine Saffi, Aybar, Palaty об условиях прямых проектных продаж.</li>
+<li><strong>Вт 29.09.</strong> Инвентаризация 10+ работ: ID, размеры, вес, материал, крепление, наличие, фото. Fact sheet с исправлениями. Билеты на IHS и Decorex, регистрация в приложении Decorex для назначения встреч.</li>
+<li><strong>Ср 30.09.</strong> Семь тёплых писем (раздел 06А) с крючком KORE. Правила цены и trade-условия в черновике. Бронь фотографа и локации на 8–9 октября.</li>
+<li><strong>Чт 01.10.</strong> ICP и рубрика оценки. Агент собирает 30 карточек волны 1 по промпту 1; вы проверяете первые 10. CRM и поля. Почтовый домен, SPF/DKIM/DMARC, прогрев.</li>
+<li><strong>Пт 02.10.</strong> Профиль LinkedIn Ирины. Структура project pack и раздела сайта. Черновики трёх эталонных писем. Заказ материалов для сэмпл-китов.</li>
+<li><strong>Сб–Вс 03–04.10.</strong> Ирина утверждает список работ, карточки, тон писем. Подготовка к Independent Hotel Show: список экспонентов и дизайнеров, кого искать.</li>
+</ol>
+<div class="callout"><p><strong>Что я могу сделать сразу после вашего «да»:</strong> собрать fact sheet и правила цены в один документ для Ирины; написать ICP и запустить агента на первые 30 карточек; набросать структуру project pack и текст раздела «For Architects &amp; Art Consultants»; собрать каркас CRM и дашборда аналитика; подготовить прототип AR-страницы на одной работе.</p></div>
+</section>
+
+<section id="s16">
+<h2><span class="n">16</span>Источники</h2>
+<ul class="sources">
+<li>Четыре исходных плана: Claude (этот чат, 27.09.2026), GPT «Исследование и план продвижения» с приложениями А–В (28.09.2026), Gemini «AI-Промплэн», Grok «Бриф + промплан».</li>
+<li><a href="https://irinaraz.com/about/">irinaraz.com: About</a>, <a href="https://irinaraz.com/portfolio/">Work</a>, <a href="https://irinaraz.com/gallery/">Gallery representation</a>, <a href="https://irinaraz.com/wp-content/uploads/2021/06/CV-website.pdf">CV 2021</a></li>
+<li><a href="https://craftprize.loewe.com/en/craftprize2018">LOEWE Craft Prize 2018: финалист Irina Razumovskaya, Barkskin</a></li>
+<li><a href="https://www.westerwald-guide.de/artikel/176027-keramikmuseum-westerwald-zeigt-ausstellung--kore--von-irina-razumovskaya">KORE, Keramikmuseum Westerwald, открытие 24.09.2026</a></li>
+<li><a href="https://www.palatygallery.ru/padparis2025">Palaty, PAD Paris 2025: цены Fertile Earths и Tryptich</a></li>
+<li><a href="https://www.decorex.com/visit/your-ticket">Decorex 11–14.10.2026</a>, <a href="https://www.olympia.co.uk/events/decorex">Olympia: Independent Hotel Show 5–6.10</a>, <a href="https://www.excel.london/whats-on/hix-europe-2026">HIX Europe + AHEAD Europe 25–26.11.2026</a></li>
+<li><a href="https://mindadowlinghotelartconsultants.com/who-we-are">Minda Dowling Hotel Art Consultants</a>, <a href="https://www.artelier.com/art-for-hotels">Artelier: Art for Hotels</a>, <a href="https://artiq.co/art/hospitality">Artiq: Hospitality</a>, <a href="https://www.artelier.com/post/the-industry-s-best-art-consultants-by-region">Artelier: консультанты по регионам</a></li>
+<li><a href="https://www.rca.ac.uk/more/staff/irina-razumovskaya/">RCA: профиль</a>, <a href="https://sculptors.org.uk/artists/irina-razumovskaya">Royal Society of Sculptors</a>, <a href="https://www.surfacemag.com/articles/irina-razumovskaya-designer-day">Surface: GRUZ</a></li>
+<li>Право: <a href="https://ico.org.uk/for-organisations/direct-marketing-and-privacy-and-electronic-communications/business-to-business-marketing/">ICO: B2B marketing</a>, <a href="https://www.linkedin.com/help/lms/answer/a420864">LinkedIn: Matched Audiences</a></li>
+</ul>
+</section>
+</main>
+</div>
